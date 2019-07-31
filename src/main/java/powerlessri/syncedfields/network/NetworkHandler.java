@@ -1,7 +1,7 @@
-package demo.syncedfields.network;
+package powerlessri.syncedfields.network;
 
 import com.google.common.base.Preconditions;
-import demo.syncedfields.SyncedFields;
+import powerlessri.syncedfields.SyncedFields;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;

@@ -1,4 +1,4 @@
-package demo.syncedfields.signal;
+package powerlessri.syncedfields.signal;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
-package demo.syncedfields.signal;
+package powerlessri.syncedfields.signal;
 
-import demo.syncedfields.SyncedFields;
+import powerlessri.syncedfields.SyncedFields;
 
 import java.io.*;
 import java.util.function.Consumer;

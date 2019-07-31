@@ -1,4 +1,4 @@
-package demo.syncedfields;
+package powerlessri.syncedfields;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;

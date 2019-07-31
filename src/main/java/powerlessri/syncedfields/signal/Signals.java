@@ -1,4 +1,4 @@
-package demo.syncedfields.signal;
+package powerlessri.syncedfields.signal;
 
 import com.google.common.base.Preconditions;
 import net.minecraftforge.fml.network.NetworkDirection;
