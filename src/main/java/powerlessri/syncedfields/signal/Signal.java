@@ -2,27 +2,16 @@ package powerlessri.syncedfields.signal;
 
 import java.io.Serializable;
 
-public abstract class Signal<M extends Serializable> {
-
-    public enum Type {
-        SENDER, RECEIVER
-    }
+public abstract class Signal<M extends Serializable> implements ISignal<M> {
 
     private final String name;
     private final Class<M> typeClass;
+    private boolean valid = true;
 
     protected Signal(String name, Class<M> typeClass) {
         this.name = name;
         this.typeClass = typeClass;
     }
-
-    public abstract void transfer(M value);
-
-    public abstract void receive(M value);
-
-    public abstract void receiveRaw(byte[] bytes);
-
-    public abstract Type getType();
 
     public String getName() {
         return name;
@@ -30,5 +19,13 @@ public abstract class Signal<M extends Serializable> {
 
     public Class<M> getTypeClass() {
         return typeClass;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void invalidate() {
+        valid = false;
     }
 }

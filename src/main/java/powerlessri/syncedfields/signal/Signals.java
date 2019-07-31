@@ -6,7 +6,7 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.*;
 
-public class Signals {
+public final class Signals {
 
     private static Signals CLIENT_INSTANCE;
     private static Signals SERVER_INSTANCE;
@@ -32,16 +32,19 @@ public class Signals {
         }
     }
 
+    private Signals() {
+    }
+
     private final Map<String, Set<Signal<?>>> registeredReceivers = new HashMap<>();
 
     public void register(String name, Signal<?> signalObject) {
-        Preconditions.checkArgument(signalObject.getType() == Signal.Type.RECEIVER);
+        Preconditions.checkArgument(signalObject.getSignalType() == ISignal.Type.RECEIVER);
         getRegisteredReceivers(name).add(signalObject);
     }
 
     public void receive(String name, byte[] bytes) {
         for (Signal<?> signal : registeredReceivers.get(name)) {
-            signal.receiveRaw(bytes);
+            signal.receiveRawData(bytes);
         }
     }
 

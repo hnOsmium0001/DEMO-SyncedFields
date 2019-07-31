@@ -2,19 +2,19 @@ package powerlessri.syncedfields.signal;
 
 import powerlessri.syncedfields.SyncedFields;
 import powerlessri.syncedfields.network.NetworkHandler;
-import powerlessri.syncedfields.network.PacketSignal;
+import powerlessri.syncedfields.network.PacketSignalData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.io.*;
 
-abstract class SenderSignal<M extends Serializable> extends Signal<M> {
+public abstract class SenderSignal<M extends Serializable> extends Signal<M> {
 
     public static <M extends Serializable> SenderSignal<M> forClient(String name, Class<M> typeClass) {
         return new SenderSignal<M>(name, typeClass) {
             @Override
-            protected void sendPacket(PacketSignal msg) {
+            protected void sendPacket(PacketSignalData msg) {
                 NetworkHandler.CHANNEL.sendToServer(msg);
             }
         };
@@ -23,7 +23,7 @@ abstract class SenderSignal<M extends Serializable> extends Signal<M> {
     public static <M extends Serializable> SenderSignal<M> forServer(String name, Class<M> typeClass) {
         return new SenderSignal<M>(name, typeClass) {
             @Override
-            protected void sendPacket(PacketSignal msg) {
+            protected void sendPacket(PacketSignalData msg) {
                 for (ServerPlayerEntity player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
                     NetworkHandler.CHANNEL.sendTo(msg, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
                 }
@@ -43,7 +43,7 @@ abstract class SenderSignal<M extends Serializable> extends Signal<M> {
             out.flush();
 
             byte[] bytes = bos.toByteArray();
-            PacketSignal msg = new PacketSignal(getName(), bytes);
+            PacketSignalData msg = new PacketSignalData(getName(), bytes);
             sendPacket(msg);
         } catch (IOException e) {
             SyncedFields.logger.error("Exception when serializing object {}", value, e);
@@ -56,14 +56,14 @@ abstract class SenderSignal<M extends Serializable> extends Signal<M> {
     }
 
     @Override
-    public void receiveRaw(byte[] bytes) {
+    public void receiveRawData(byte[] bytes) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Type getType() {
+    public Type getSignalType() {
         return Type.SENDER;
     }
 
-    protected abstract void sendPacket(PacketSignal msg);
+    protected abstract void sendPacket(PacketSignalData msg);
 }

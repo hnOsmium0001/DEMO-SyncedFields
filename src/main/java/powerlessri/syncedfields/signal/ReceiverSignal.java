@@ -5,7 +5,7 @@ import powerlessri.syncedfields.SyncedFields;
 import java.io.*;
 import java.util.function.Consumer;
 
-class ReceiverSignal<M extends Serializable> extends Signal<M> {
+public class ReceiverSignal<M extends Serializable> extends Signal<M> {
 
     private final Consumer<M> onReceived;
 
@@ -20,7 +20,7 @@ class ReceiverSignal<M extends Serializable> extends Signal<M> {
     }
 
     @Override
-    public void receiveRaw(byte[] bytes) {
+    public void receiveRawData(byte[] bytes) {
         try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
             ObjectInput in = new ObjectInputStream(bis);
             Object value = in.readObject();
@@ -38,7 +38,7 @@ class ReceiverSignal<M extends Serializable> extends Signal<M> {
     }
 
     @Override
-    public Type getType() {
+    public Type getSignalType() {
         return Type.RECEIVER;
     }
 }

@@ -25,7 +25,7 @@ public final class NetworkHandler {
 
     public static void init() {
         // Both sides
-        registerMessage(PacketSignal.class, PacketSignal::encode, PacketSignal::decode, PacketSignal::handle);
+        registerMessage(PacketSignalData.class, PacketSignalData::encode, PacketSignalData::decode, PacketSignalData::handle);
     }
 
     private static int nextID = 0;
