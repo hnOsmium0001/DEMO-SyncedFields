@@ -20,6 +20,8 @@ public interface ISignal<M extends Serializable> {
 
     void invalidate();
 
+    void validate();
+
     enum Type {
         SENDER, RECEIVER
     }

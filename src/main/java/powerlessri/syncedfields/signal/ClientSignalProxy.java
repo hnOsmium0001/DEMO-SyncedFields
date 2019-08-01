@@ -5,18 +5,18 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.io.Serializable;
 
-class SidedSignalProxy<M extends Serializable> implements ISignal<M> {
+final class ClientSignalProxy<M extends Serializable> implements ISignal<M> {
 
     private boolean adaptedToDedicatedServer;
     private ISignal<M> handle;
 
-    protected SidedSignalProxy(ISignal<M> handle) {
-        this(handle.getName(), handle.getTypeClass(), handle);
-    }
+    private final ISignal<M> clientSignal;
+    private final ISignal<M> sharedSignal;
 
-    protected SidedSignalProxy(String name, Class<M> typeClass, ISignal<M> handle) {
+    public ClientSignalProxy(ISignal<M> clientSignal, ISignal<M> integratedServerSignal) {
         this.adaptedToDedicatedServer = ServerLifecycleHooks.getCurrentServer().isDedicatedServer();
-        this.handle = handle;
+        this.clientSignal = clientSignal;
+        this.sharedSignal = new SharedSignal<>(clientSignal, integratedServerSignal);
     }
 
     @Override
@@ -35,20 +35,26 @@ class SidedSignalProxy<M extends Serializable> implements ISignal<M> {
     }
 
     private void checkForConnection() {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (server == null) {
+        MinecraftServer connectedServer = ServerLifecycleHooks.getCurrentServer();
+        if (connectedServer == null) {
             handle.invalidate();
-        } else if (server.isDedicatedServer() && isAdaptedToIntegratedServer()) {
+        } else if (connectedServer.isDedicatedServer() && isAdaptedToIntegratedServer()) {
             // Adapt to dedicated server
             handle.invalidate();
-            // TODO new handle object
+            setCurrentHandle(clientSignal);
             adaptedToDedicatedServer = true;
-        } else if (!server.isDedicatedServer() && isAdaptedToDedicatedServer()) {
+        } else if (!connectedServer.isDedicatedServer() && isAdaptedToDedicatedServer()) {
             // Adapt to integrated server
             handle.invalidate();
-            // TODO new handle object
+            setCurrentHandle(sharedSignal);
             adaptedToDedicatedServer = false;
         }
+    }
+
+    private void setCurrentHandle(ISignal<M> handle) {
+        this.handle.invalidate();
+        this.handle = handle;
+        handle.validate();
     }
 
     @Override
@@ -74,6 +80,11 @@ class SidedSignalProxy<M extends Serializable> implements ISignal<M> {
     @Override
     public void invalidate() {
         handle.invalidate();
+    }
+
+    @Override
+    public void validate() {
+        handle.validate();
     }
 
     public boolean isAdaptedToDedicatedServer() {

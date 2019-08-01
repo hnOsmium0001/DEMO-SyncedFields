@@ -28,4 +28,9 @@ public abstract class Signal<M extends Serializable> implements ISignal<M> {
     public void invalidate() {
         valid = false;
     }
+
+    @Override
+    public void validate() {
+        valid = true;
+    }
 }
