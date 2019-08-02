@@ -1,6 +1,5 @@
-package powerlessri.syncedfields.network;
+package powerlessri.syncedfields.signal;
 
-import powerlessri.syncedfields.signal.Signals;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 

@@ -2,7 +2,6 @@ package powerlessri.syncedfields.signal;
 
 import powerlessri.syncedfields.SyncedFields;
 import powerlessri.syncedfields.network.NetworkHandler;
-import powerlessri.syncedfields.network.PacketSignalData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
